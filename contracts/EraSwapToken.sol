@@ -307,19 +307,11 @@ function beneficiariesPercentage(address[] beneficiaries uint8[] percentages) on
       require(beneficiaries[i] != 0x0);
       require(percentages[i] > 0);
 
-      if(i > 0){
-          beneficiary[beneficiaries[i]] = true;
+      beneficiary[beneficiaries[i]] = true;
 
-          shares[beneficiaries[i]] = percentages[i];
-          sumOfPercentages = sumOfPercentages.add(percentages[i]); 
-      }
-
-      else{
-          beneficiary[beneficiaries[i]] = true;
-
-          shares[beneficiaries[i]] = percentages[i];
-          sumOfPercentages = sumOfPercentages.add(percentages[i]); 
-      }
+      shares[beneficiaries[i]] = percentages[i];
+      sumOfPercentages = sumOfPercentages.add(percentages[i]); 
+     
     }
 
     require(sumOfPercentages == 100);
