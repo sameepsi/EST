@@ -295,7 +295,7 @@ contract MintableToken is StandardToken, Ownable {
   }
 }
 
-function beneficiariesPercentage(address[] beneficiaries uint8[] percentages) onlyOwner external returns(bool){
+function beneficiariesPercentage(address[] beneficiaries, uint8[] percentages) onlyOwner external returns(bool){
    
     require(beneficiaries.length == 7);
     require(percentages.length == 7);
