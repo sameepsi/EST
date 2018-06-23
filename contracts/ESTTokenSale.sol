@@ -82,7 +82,6 @@ interface Token {
     function transfer(address _to, uint256 _amount) external  returns (bool success);
     function balanceOf(address _owner) external view returns (uint256 balance);
     function decimals()external view returns (uint8);
-    function burnAllTokens() external;
 }
 
 /**
@@ -150,7 +149,7 @@ contract ESTTokenSale is Ownable{
       uint256 public totalFunding;
       
       //total tokens available for sale
-      uint256 tokensAvailableForSale = 45050000000000000; //considering 9 decimal places
+      uint256 tokensAvailableForSale = 45050000000000000; //considering 8 decimal places
       
       
       uint8 public noOfPhases;
@@ -254,18 +253,14 @@ contract ESTTokenSale is Ownable{
       vault.withdrawToWallet();
   }
   
-//   //method to refund money
-//   function getRefund()public {
-      
-//       vault.refund(msg.sender);
-//   }
+
   
   /**
   * @dev Can be called only once. The method to allow owner to set tier information
   * @param _noOfPhases The integer to set number of tiers
   * @param _startTimes The array containing start time of each tier
   * @param _endTimes The array containing end time of each tier
-  * @param _cummulativeHardCaps The array containing hard cap for each tier
+  * @param _cummulativeHardCaps The array containing cumulative hard cap for each tier
   * @param _bonusPercentages The array containing bonus percentage for each tier
   * The arrays should be in sync with each other. For each index 0 for each of the array should contain info about Tier 1, similarly for Tier2, 3 and 4 .
   * Sales hard cap will be the hard cap of last tier
@@ -436,12 +431,6 @@ contract ESTTokenSale is Ownable{
        return vault.deposited(_user);
    }
    
-   /**
-   *@dev Method to check whether refund process has been initiated or not by the contract.
-   */
-//    function isRefunding()public view returns(bool) {
-//        return vault.isRefunding();
-//    }
    
    /**
    *@dev Method to transfer all remanining tokens left to owner left with the sales contract after the sale has ended
@@ -449,7 +438,7 @@ contract ESTTokenSale is Ownable{
    function transferRemainingTokens()public onlyOwner _contractUp _saleEnded {
        
        token.transfer(msg.sender,address(this).balance);
-       //token.burnAllTokens();
+      
    }
    
    function withDrawFunds()public onlyOwner _saleEnded _contractUp {
