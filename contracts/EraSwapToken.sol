@@ -300,6 +300,7 @@ function beneficiariesPercentage(address[] beneficiaries uint8[] percentages) on
     require(beneficiaries.length == 7);
     require(percentages.length == 7);
     uint8 sumOfPercentages;
+    mapping(address => bool) beneficiary;
 
     for(uint8 i = 0; i < beneficiaries.length; i++){
 
@@ -307,13 +308,14 @@ function beneficiariesPercentage(address[] beneficiaries uint8[] percentages) on
       require(percentages[i] > 0);
 
       if(i > 0){
-          
+          beneficiary[beneficiaries[i]] = true;
+
           shares[beneficiaries[i]] = percentages[i];
           sumOfPercentages = sumOfPercentages.add(percentages[i]); 
       }
 
       else{
-          require(beneficiaries[i] != beneficiaries[i+1]);
+          beneficiary[beneficiaries[i]] = true;
 
           shares[beneficiaries[i]] = percentages[i];
           sumOfPercentages = sumOfPercentages.add(percentages[i]); 
