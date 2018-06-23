@@ -238,8 +238,11 @@ contract BurnableToken is StandardToken, Ownable {
 
 contract MintableToken is StandardToken, Ownable {
 
+  mapping(address => uint256) shares;
+
   event Mint(address indexed to, uint256 amount);
   event MintFinished();
+  event BeneficiariesAdded();
 
   bool public mintingFinished = false;
 
@@ -260,9 +263,20 @@ contract MintableToken is StandardToken, Ownable {
    * @return A boolean that indicates if the operation was successful.
    */
 
-  function mint(address _to, uint256 _amount) hasMintPermission  canMint public  returns (bool){
+  function mint() hasMintPermission  canMint public  returns (bool){
 
-    totalSupply_ = totalSupply_.add(_amount);
+    require(shares.length == 7);
+    uint256 public tokensToBeMint; 
+    uint256 tokensLeftToBeMinted;
+    tokensLeftToBeMinted = totalSupply;
+    tokensToBeMint = tokensLeftToBeMinted.div(10);
+
+    for(uint8 i = 0; i < shares.length; i++){
+        balances[shares]
+    }
+
+    tokensLeftToBeMinted = tokensLeftToBeMinted.sub(tokensToBeMint);
+    
     balances[_to] = balances[_to].add(_amount);
     emit Mint(_to, _amount);
     emit Transfer(address(0), _to, _amount);
@@ -279,6 +293,36 @@ contract MintableToken is StandardToken, Ownable {
     emit MintFinished();
     return true;
   }
+}
+
+function beneficiariesPercentage(address[] beneficiaries uint8[] percentages) onlyOwner external returns(bool){
+   
+    require(beneficiaries.length == 7);
+    require(percentages.length == 7);
+    uint8 sumOfPercentages;
+
+    for(uint8 i = 0; i < beneficiaries.length; i++){
+
+      require(beneficiaries[i] != 0x0);
+      require(percentages[i] > 0);
+
+      if(i > 0){
+          
+          shares[beneficiaries[i]] = percentages[i];
+          sumOfPercentages = sumOfPercentages.add(percentages[i]); 
+      }
+
+      else{
+          require(beneficiaries[i] != beneficiaries[i+1]);
+
+          shares[beneficiaries[i]] = percentages[i];
+          sumOfPercentages = sumOfPercentages.add(percentages[i]); 
+      }
+    }
+
+    require(sumOfPercentages == 100);
+    emit BeneficiariesAdded();
+    return true;
 } 
     
 /**
